@@ -67,6 +67,4 @@
         {"type": "composer", "url": "https://packagist.phpcomposer.com"},
         {"packagist": false}
     ]
-
-    
 }
