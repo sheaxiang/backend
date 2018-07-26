@@ -104,7 +104,7 @@ function get_hour_and_min($time)
  * @param $lat2
  * @return float
  */
-function get_two_position_distance($lon1, $lat1, $lon2, $lat2)
+/* function get_two_position_distance($lon1, $lat1, $lon2, $lat2)
 {
     $radius = 6378.137;
     $rad = floatval(M_PI / 180.0);
@@ -126,3 +126,4 @@ function get_two_position_distance($lon1, $lat1, $lon2, $lat2)
 
     return round($dist * $radius, 3);
 }
+ */
