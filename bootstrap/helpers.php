@@ -82,7 +82,7 @@ function trimall($str)
  * @param $time
  * @return array
  */
-function get_hour_and_min($time)
+/* function get_hour_and_min($time)
 {
     $sec = round($time / 60);
     if ($sec >= 60) {
@@ -94,7 +94,7 @@ function get_hour_and_min($time)
         $min = $sec;
     }
     return ['hour' => $hour, 'min' => $min];
-}
+} */
 
 /**
  * 根据经纬度获取两点间的直线距离，返回 KM
