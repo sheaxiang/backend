@@ -10,10 +10,10 @@ util.title = function (title) {
 };
 
 const ajaxUrl = env === 'development'
-    ? 'http://lucms.test/api'
+    ? 'https://backend.webooc.com/api'
     : env === 'production'
-        ? 'http://lucms.test/api'
-        : 'http://lucms.test/api';
+        ? 'https://backend.webooc.com/api'
+        : 'https://backend.webooc.com/api';
 
 // const ajaxUrl = 'http://lucms.codehaoshi.com/api';
 

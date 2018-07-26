@@ -17,7 +17,7 @@ import './base';
 Vue.use(VueI18n);
 Vue.use(iView);
 
-const app_url = '//lucms.test/api';
+const app_url = '//backend.webooc.com/api';
 // const app_url = '//lucms.codehaoshi.com/api';
 
 Object.defineProperty(Vue.prototype, '$util', {value: util}); // 全局能使用 this.$axios
