@@ -5,7 +5,7 @@
     session()->flash($key, ['status' => $status, 'message' => $msg]);
 } */
 
-function admin_log_record($user_id, $type, $table_name, $content_message = '', $content_data = '')
+/* function admin_log_record($user_id, $type, $table_name, $content_message = '', $content_data = '')
 {
     return (new \App\Models\Log())->storeLog([
         'user_id' => $user_id,
@@ -17,13 +17,13 @@ function admin_log_record($user_id, $type, $table_name, $content_message = '', $
             'message' => $content_message,
         ]
     ]);
-}
+} */
 
 /**
  * 获取客户端 ip
  * @return array|false|null|string
  */
-function get_client_ip()
+/* function get_client_ip()
 {
     static $realip = NULL;
     if ($realip !== NULL) {
@@ -50,7 +50,7 @@ function get_client_ip()
     }
 
     return $realip;
-}
+} */
 
 /**
  * 判断数组的键是否存在，并且佱不为空
@@ -58,10 +58,10 @@ function get_client_ip()
  * @param $column
  * @return null
  */
-function isset_and_not_empty($arr, $column)
+/* function isset_and_not_empty($arr, $column)
 {
     return (isset($arr[$column]) && $arr[$column]) ? $arr[$column] : '';
-}
+} */
 
 /**
  * 过滤用户输入数据
@@ -69,13 +69,13 @@ function isset_and_not_empty($arr, $column)
  * @return mixed
  *
  */
-function trimall($str)
+/* function trimall($str)
 {
     $qian = array(" ", "　", "\t", "\n", "\r");
     $qian = array(" ", "　", "\t");
     $hou = array("", "", "");
     return str_replace($qian, $hou, $str);
-}
+} */
 
 /**
  * 将时间戳转换成 xx 时\xx 分
