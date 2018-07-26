@@ -1,11 +1,11 @@
 <?php
 
-/* function flash($status = 'success', $msg = '操作成功', $key = 'toastrMsg')
+function flash($status = 'success', $msg = '操作成功', $key = 'toastrMsg')
 {
     session()->flash($key, ['status' => $status, 'message' => $msg]);
-} */
+}
 
-/* function admin_log_record($user_id, $type, $table_name, $content_message = '', $content_data = '')
+function admin_log_record($user_id, $type, $table_name, $content_message = '', $content_data = '')
 {
     return (new \App\Models\Log())->storeLog([
         'user_id' => $user_id,
@@ -17,13 +17,13 @@
             'message' => $content_message,
         ]
     ]);
-} */
+}
 
 /**
  * 获取客户端 ip
  * @return array|false|null|string
  */
-/* function get_client_ip()
+function get_client_ip()
 {
     static $realip = NULL;
     if ($realip !== NULL) {
@@ -50,7 +50,7 @@
     }
 
     return $realip;
-} */
+}
 
 /**
  * 判断数组的键是否存在，并且佱不为空
@@ -58,10 +58,10 @@
  * @param $column
  * @return null
  */
-/* function isset_and_not_empty($arr, $column)
+function isset_and_not_empty($arr, $column)
 {
     return (isset($arr[$column]) && $arr[$column]) ? $arr[$column] : '';
-} */
+}
 
 /**
  * 过滤用户输入数据
@@ -69,20 +69,20 @@
  * @return mixed
  *
  */
-/* function trimall($str)
+function trimall($str)
 {
     $qian = array(" ", "　", "\t", "\n", "\r");
     $qian = array(" ", "　", "\t");
     $hou = array("", "", "");
     return str_replace($qian, $hou, $str);
-} */
+}
 
 /**
  * 将时间戳转换成 xx 时\xx 分
  * @param $time
  * @return array
  */
-/* function get_hour_and_min($time)
+function get_hour_and_min($time)
 {
     $sec = round($time / 60);
     if ($sec >= 60) {
@@ -94,7 +94,7 @@
         $min = $sec;
     }
     return ['hour' => $hour, 'min' => $min];
-} */
+}
 
 /**
  * 根据经纬度获取两点间的直线距离，返回 KM
@@ -104,7 +104,7 @@
  * @param $lat2
  * @return float
  */
-/* function get_two_position_distance($lon1, $lat1, $lon2, $lat2)
+function get_two_position_distance($lon1, $lat1, $lon2, $lat2)
 {
     $radius = 6378.137;
     $rad = floatval(M_PI / 180.0);
@@ -126,4 +126,3 @@
 
     return round($dist * $radius, 3);
 }
- */
