@@ -1,18 +1,23 @@
 <?php
 
-namespace App\Providers;
+namespace Yeelight\Providers;
 
-use App\Models\Advertisement;
-use App\Models\AdvertisementPosition;
-use App\Models\Article;
-use App\Models\Attachment;
-use App\Models\IpFilter;
-use App\Models\Permission;
-use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
+/**
+ * Class RouteServiceProvider
+ *
+ * @category Yeelight
+ *
+ * @package Yeelight\Providers
+ *
+ * @author Sheldon Lee <xdlee110@gmail.com>
+ *
+ * @license https://opensource.org/licenses/MIT MIT
+ *
+ * @link https://www.yeelight.com
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -22,7 +27,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
+    protected $namespace = 'Yeelight\Http\Controllers';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -34,30 +39,6 @@ class RouteServiceProvider extends ServiceProvider
         //
 
         parent::boot();
-        Route::bind('user', function ($value) {
-            return User::where('id', $value)->first();
-        });
-        Route::bind('role', function ($value) {
-            return Role::where('id', $value)->first();
-        });
-        Route::bind('permission', function ($value) {
-            return Permission::where('id', $value)->first();
-        });
-        Route::bind('attachment', function ($value) {
-            return Attachment::where('id', $value)->first();
-        });
-        Route::bind('advertisement_position', function ($value) {
-            return AdvertisementPosition::where('id', $value)->first();
-        });
-        Route::bind('advertisement', function ($value) {
-            return Advertisement::where('id', $value)->first();
-        });
-        Route::bind('article', function ($value) {
-            return Article::where('id', $value)->first();
-        });
-        Route::bind('ip_filter', function ($value) {
-            return IpFilter::where('id', $value)->first();
-        });
     }
 
     /**
@@ -84,8 +65,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/web.php'));
+             ->namespace($this->namespace)
+             ->group(base_path('routes/web.php'));
     }
 
     /**
@@ -97,9 +78,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('api')
-            ->middleware('api')
-            ->namespace($this->namespace)
-            ->group(base_path('routes/api.php'));
+//        Route::prefix('api')
+//             ->middleware('api')
+//             ->namespace($this->namespace)
+//             ->group(base_path('routes/api.php'));
+
+        $api = app('Dingo\Api\Routing\Router');
+
+        require base_path('routes/api.php');
     }
 }

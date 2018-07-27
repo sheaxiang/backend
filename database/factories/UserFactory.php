@@ -1,7 +1,6 @@
 <?php
 
 use Faker\Generator as Faker;
-use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,17 +13,13 @@ use Carbon\Carbon;
 |
 */
 
-$factory->define(App\Models\User::class, function (Faker $faker) {
+$factory->define(\Yeelight\Models\Foundation\User::class, function (Faker $faker) {
     static $password;
-    $now = Carbon::now()->toDateTimeString();
 
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('123456'),
+        'name'           => $faker->name,
+        'email'          => $faker->unique()->safeEmail,
+        'password'       => $password ?: $password = bcrypt('secret'),
         'remember_token' => str_random(10),
-        'description' => $faker->sentence(),
-        'created_at' => $now,
-        'updated_at' => $now,
     ];
 });

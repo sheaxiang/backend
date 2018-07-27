@@ -13,7 +13,20 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'Yeelight Cloud'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Application Title, Keywords, Description
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'title' => 'Yeelight',
+
+    'keywords' => 'Yeelight',
+
+    'description' => 'Yeelight',
 
     /*
     |--------------------------------------------------------------------------
@@ -78,7 +91,7 @@ return [
     |
     */
 
-    'locale' => 'zh-CN',
+    'locale' => 'zh',
 
     /*
     |--------------------------------------------------------------------------
@@ -91,7 +104,7 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
+    'fallback_locale' => 'zh',
 
     /*
     |--------------------------------------------------------------------------
@@ -167,17 +180,24 @@ return [
         /*
          * Package Service Providers...
          */
+        Dingo\Api\Provider\LaravelServiceProvider::class,
+        Prettus\Repository\Providers\RepositoryServiceProvider::class,
+        Monarobase\CountryList\CountryListServiceProvider::class,
+        Germey\Geetest\GeetestServiceProvider::class,
 
         /*
          * Application Service Providers...
          */
-        App\Providers\AppServiceProvider::class,
-        App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
-        App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-
-        Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class,
+        Yeelight\Providers\AppServiceProvider::class,
+        Yeelight\Providers\AuthServiceProvider::class,
+        // Yeelight\Providers\BroadcastServiceProvider::class,
+        Yeelight\Providers\EventServiceProvider::class,
+        Yeelight\Providers\RouteServiceProvider::class,
+        Yeelight\Providers\ApiServiceProvider::class,
+        Yeelight\Providers\RepositoryServiceProvider::class,
+        Yeelight\Providers\PolymorphicServiceProvider::class,
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        \Yeelight\Providers\BackendServiceProvider::class,
 
     ],
 
@@ -194,40 +214,47 @@ return [
 
     'aliases' => [
 
-        'App' => Illuminate\Support\Facades\App::class,
-        'Artisan' => Illuminate\Support\Facades\Artisan::class,
-        'Auth' => Illuminate\Support\Facades\Auth::class,
-        'Blade' => Illuminate\Support\Facades\Blade::class,
-        'Broadcast' => Illuminate\Support\Facades\Broadcast::class,
-        'Bus' => Illuminate\Support\Facades\Bus::class,
-        'Cache' => Illuminate\Support\Facades\Cache::class,
-        'Config' => Illuminate\Support\Facades\Config::class,
-        'Cookie' => Illuminate\Support\Facades\Cookie::class,
-        'Crypt' => Illuminate\Support\Facades\Crypt::class,
-        'DB' => Illuminate\Support\Facades\DB::class,
-        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
-        'Event' => Illuminate\Support\Facades\Event::class,
-        'File' => Illuminate\Support\Facades\File::class,
-        'Gate' => Illuminate\Support\Facades\Gate::class,
-        'Hash' => Illuminate\Support\Facades\Hash::class,
-        'Lang' => Illuminate\Support\Facades\Lang::class,
-        'Log' => Illuminate\Support\Facades\Log::class,
-        'Mail' => Illuminate\Support\Facades\Mail::class,
+        'App'          => Illuminate\Support\Facades\App::class,
+        'Artisan'      => Illuminate\Support\Facades\Artisan::class,
+        'Auth'         => Illuminate\Support\Facades\Auth::class,
+        'Blade'        => Illuminate\Support\Facades\Blade::class,
+        'Broadcast'    => Illuminate\Support\Facades\Broadcast::class,
+        'Bus'          => Illuminate\Support\Facades\Bus::class,
+        'Cache'        => Illuminate\Support\Facades\Cache::class,
+        'Config'       => Illuminate\Support\Facades\Config::class,
+        'Cookie'       => Illuminate\Support\Facades\Cookie::class,
+        'Crypt'        => Illuminate\Support\Facades\Crypt::class,
+        'DB'           => Illuminate\Support\Facades\DB::class,
+        'Eloquent'     => Illuminate\Database\Eloquent\Model::class,
+        'Event'        => Illuminate\Support\Facades\Event::class,
+        'File'         => Illuminate\Support\Facades\File::class,
+        'Gate'         => Illuminate\Support\Facades\Gate::class,
+        'Hash'         => Illuminate\Support\Facades\Hash::class,
+        'JWTAuth'      => Tymon\JWTAuth\Facades\JWTAuth::class,
+        'JWTFactory'   => Tymon\JWTAuth\Facades\JWTFactory::class,
+        'Lang'         => Illuminate\Support\Facades\Lang::class,
+        'Log'          => Illuminate\Support\Facades\Log::class,
+        'Mail'         => Illuminate\Support\Facades\Mail::class,
         'Notification' => Illuminate\Support\Facades\Notification::class,
-        'Password' => Illuminate\Support\Facades\Password::class,
-        'Queue' => Illuminate\Support\Facades\Queue::class,
-        'Redirect' => Illuminate\Support\Facades\Redirect::class,
-        'Redis' => Illuminate\Support\Facades\Redis::class,
-        'Request' => Illuminate\Support\Facades\Request::class,
-        'Response' => Illuminate\Support\Facades\Response::class,
-        'Route' => Illuminate\Support\Facades\Route::class,
-        'Schema' => Illuminate\Support\Facades\Schema::class,
-        'Session' => Illuminate\Support\Facades\Session::class,
-        'Storage' => Illuminate\Support\Facades\Storage::class,
-        'URL' => Illuminate\Support\Facades\URL::class,
-        'Validator' => Illuminate\Support\Facades\Validator::class,
-        'View' => Illuminate\Support\Facades\View::class,
+        'Password'     => Illuminate\Support\Facades\Password::class,
+        'Queue'        => Illuminate\Support\Facades\Queue::class,
+        'Redirect'     => Illuminate\Support\Facades\Redirect::class,
+        'Redis'        => Illuminate\Support\Facades\Redis::class,
+        'Request'      => Illuminate\Support\Facades\Request::class,
+        'Response'     => Illuminate\Support\Facades\Response::class,
+        'Route'        => Illuminate\Support\Facades\Route::class,
+        'Schema'       => Illuminate\Support\Facades\Schema::class,
+        'Session'      => Illuminate\Support\Facades\Session::class,
+        'Storage'      => Illuminate\Support\Facades\Storage::class,
+        'URL'          => Illuminate\Support\Facades\URL::class,
+        'Validator'    => Illuminate\Support\Facades\Validator::class,
+        'View'         => Illuminate\Support\Facades\View::class,
 
+        'Image'                 => Intervention\Image\Facades\Image::class,
+        'LaravelLocalization'   => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
+        'Countries'             => Monarobase\CountryList\CountryListFacade::class,
+        // 'GeoIP' => Torann\GeoIP\GeoIPFacade::class,
+        'Geetest' => Germey\Geetest\Geetest::class,
     ],
 
 ];

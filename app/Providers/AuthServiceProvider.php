@@ -1,12 +1,23 @@
 <?php
 
-namespace App\Providers;
+namespace Yeelight\Providers;
 
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Laravel\Passport\Passport;
-use Laravel\Passport\RouteRegistrar;
 
+/**
+ * Class AuthServiceProvider
+ *
+ * @category Yeelight
+ *
+ * @package Yeelight\Providers
+ *
+ * @author Sheldon Lee <xdlee110@gmail.com>
+ *
+ * @license https://opensource.org/licenses/MIT MIT
+ *
+ * @link https://www.yeelight.com
+ */
 class AuthServiceProvider extends ServiceProvider
 {
     /**
@@ -15,7 +26,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        'App\Model' => 'App\Policies\ModelPolicy',
+        'Yeelight\Models' => 'Yeelight\Policies\ModelPolicy',
     ];
 
     /**
@@ -26,14 +37,22 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Passport::routes(function (RouteRegistrar $router) {
-            $router->forAccessTokens();
-        }, ['prefix' => 'api/oauth', 'middleware' => 'passport-administrators']);
 
-        Passport::tokensExpireIn(now()->addMinute(1));
-        Passport::refreshTokensExpireIn(now()->addDay(1));
-//        Passport::tokensExpireIn(now()->addDay(3));
-//        Passport::refreshTokensExpireIn(now()->addDay(3));
+        Passport::routes();
 
+        // Token Lifetimes
+//        Passport::tokensExpireIn(Carbon::now()->addDays(15));
+
+        // Refresh Token Lifetimes
+//        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
+
+        // Pruning Revoked Tokens
+//        Passport::pruneRevokedTokens();
+
+        // Token Scopes
+//        Passport::tokensCan([
+//            'place-orders' => 'Place orders',
+//            'check-status' => 'Check order status',
+//        ]);
     }
 }

@@ -1,0 +1,25 @@
+language: php
+
+php:
+  - 7.1
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - php: hhvm
+
+services:
+  - mysql
+
+before_script:
+  - mv .env.example .env
+  - mysql -e 'create database if not exists cloud2;set global innodb_file_format = `BARRACUDA`;set global innodb_large_prefix = `ON`;'
+  - sudo service mysql restart
+  - travis_retry composer self-update
+  - travis_retry composer install --prefer-source --no-interaction --dev
+  - php artisan migrate:install --no-interaction -vvv
+
+script:
+  - php artisan migrate --no-interaction -vvv
+  - vendor/bin/phpunit
+  - php artisan migrate:rollback --no-interaction -vvv

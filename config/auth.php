@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard'     => 'web',
         'passwords' => 'users',
     ],
 
@@ -37,16 +37,17 @@ return [
 
     'guards' => [
         'web' => [
-            'driver' => 'session',
+            'driver'   => 'session',
             'provider' => 'users',
         ],
 
         'api' => [
-            'driver' => 'passport',
+            'driver'   => 'passport',
             'provider' => 'users',
         ],
-        'admin_user_api' => [
-            'driver' => 'passport',
+
+        'backend' => [
+            'driver'   => 'session',
             'provider' => 'admin_users',
         ],
     ],
@@ -71,17 +72,18 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
-        'admin_users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\AdminUser::class,
+            'model'  => \Yeelight\Models\Foundation\User::class,
         ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'admin_users' => [
+            'driver' => 'eloquent',
+            'model'  => \Yeelight\Models\AdminUser::class,
+        ],
     ],
 
     /*
@@ -102,13 +104,8 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
-            'table' => 'password_resets',
-            'expire' => 60,
-        ],
-        'admin_users' => [
-            'provider' => 'admin_users',
-            'table' => 'password_resets',
-            'expire' => 60,
+            'table'    => 'password_resets',
+            'expire'   => 60,
         ],
     ],
 

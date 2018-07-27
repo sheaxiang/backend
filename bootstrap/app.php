@@ -10,7 +10,6 @@
 | the IoC container for the system binding all of the various parts.
 |
 */
-require __DIR__ . '/helpers.php';
 
 $app = new Illuminate\Foundation\Application(
     realpath(__DIR__.'/../')
@@ -29,17 +28,17 @@ $app = new Illuminate\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    App\Http\Kernel::class
+    Yeelight\Http\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    App\Console\Kernel::class
+    Yeelight\Console\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    App\Exceptions\Handler::class
+    Yeelight\Exceptions\Handler::class
 );
 
 /*

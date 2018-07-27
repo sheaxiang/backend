@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Http;
+namespace Yeelight\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
 class Kernel extends HttpKernel
 {
@@ -16,10 +17,11 @@ class Kernel extends HttpKernel
     protected $middleware = [
         \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
-        \App\Http\Middleware\TrimStrings::class,
+        \Yeelight\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\TrustProxies::class,
-        \App\Http\Middleware\PassportCustomProviderAccessToken::class
+        \Yeelight\Http\Middleware\TrustProxies::class,
+        \Clockwork\Support\Laravel\ClockworkMiddleware::class,
+        \Yeelight\Http\Middleware\EnableCrossRequest::class,
     ];
 
     /**
@@ -29,18 +31,22 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\EncryptCookies::class,
+            \Yeelight\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Yeelight\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Laravel\Passport\Http\Middleware\CreateFreshApiToken::class,
+            \Yeelight\Services\Locale\Middleware\LocaleMiddleware::class,
         ],
 
         'api' => [
-            'throttle:60,1',
+//            'throttle:60,1',
             'bindings',
+            \Yeelight\Http\Controllers\Api\Middleware\ApiAccessMiddleware::class,
+            \Yeelight\Services\Locale\Middleware\LocaleMiddleware::class,
         ],
     ];
 
@@ -52,13 +58,19 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \Illuminate\Auth\Middleware\Authenticate::class,
+        'auth'       => \Illuminate\Auth\Middleware\Authenticate::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
-        'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'passport-administrators' => \App\Http\Middleware\PassportCustomProvider::class,
-        'ip-filter' =>  \App\Http\Middleware\IpFilter::class,
+        'bindings'   => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        'can'        => \Illuminate\Auth\Middleware\Authorize::class,
+        'guest'      => \Yeelight\Http\Middleware\RedirectIfAuthenticated::class,
+        'throttle'   => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'client'     => CheckClientCredentials::class,
+
+        // Passport
+        'scopes' => \Laravel\Passport\Http\Middleware\CheckScopes::class,
+        'scope'  => \Laravel\Passport\Http\Middleware\CheckForAnyScope::class,
+
+        // Socialite
+        'socialite.auto_password' => \Yeelight\Http\Middleware\SocialiteAutoPassword::class,
     ];
 }

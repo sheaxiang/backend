@@ -1,246 +1,193 @@
-## lucms
-
-## 项目概述
-
-- 产品名称：lucms
-- demo: http://lucms.codehaoshi.com/dashboard  账号：dev@lucms.com  密码： 123456
-
-lucms 是一个基于 `laravel5.5*` 与 `iviewjs` 开发的一套后台管理系统。
-
 <p align="center">
-  <br>
-  <b>Ucer-admin</b>
-  <br>
-  <a href="https://www.codehaoshi.com">
-    <img src="https://gitee.com/uploads/images/2018/0628/193946_711f853f_923445.png "lucms-1.png" width=800>
-  </a>
-  <br>
-  <a href="https://www.codehaoshi.com">
-    <img src="https://gitee.com/uploads/images/2018/0628/194014_117a03f4_923445.png "lucms-2.png" width=800>
-  </a>
-  <a href="https://www.codehaoshi.com">
-    <img src="https://gitee.com/uploads/images/2018/0628/194036_ec75ea27_923445.png "lucms3.png" width=800>
-  </a>
-  <a href="https://www.codehaoshi.com">
-    <img src="https://gitee.com/uploads/images/2018/0628/194105_bb523b94_923445.png "lucms4.png" width=800>
-  </a>
+<a href="https://scrutinizer-ci.com/g/Yeelight/cloud2/"><img src="https://scrutinizer-ci.com/g/Yeelight/cloud2/badges/quality-score.png?b=master" alt="Build Status"></a>
+<a href="https://scrutinizer-ci.com/g/Yeelight/cloud2/"><img src="https://scrutinizer-ci.com/g/Yeelight/cloud2/badges/build.png?b=master" alt="Build Status"></a>
+<a href="https://scrutinizer-ci.com/g/Yeelight/cloud2/"><img src="https://scrutinizer-ci.com/g/Yeelight/cloud2/badges/code-intelligence.svg?b=master" alt="Build Status"></a>
+<a href="https://github.com/Yeelight/cloud2">
+        <img src="https://camo.githubusercontent.com/7f67d6c3ab2cbd5ec0f076984330cc662ab76458/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f417765736f6d652d4c61726176656c2d627269676874677265656e2e7376673f7374796c653d666c61742d737175617265" alt="Awesome Laravel" data-canonical-src="https://img.shields.io/badge/Awesome-Laravel-brightgreen.svg?style=flat-square" style="max-width:100%;">
+    </a>
+<a href="https://github.com/Yeelight/cloud2"><img src="https://poser.pugx.org/yeelight/miot-api/license.svg" alt="License"></a>
 </p>
+## 简介
 
-## 功能如下
+* 基于Laravel5.5和AdminLTE的后台开发框架
+* 借鉴Laravel-admin 和 someline-starter 良多。
+* 实现基本的前端打包环境(基于laravel-mix)
+* 使用了l5-repository
+* 实现了通过后台脚手架快速创建模块，一键生成模型所需所有的符合repository模式标准的代码骨架
+* 实现了基于oauth2的接口开发骨架
+* 前后台用户分离
+* 多语言支持
+* 需要一定的laravel、前端构建基础，需要php技能中级以上。
 
-- 用户认证 —— 登录、退出
-- 用户认证 —— 多表登录
-- 用户管理 —— 头像上传、资料修改
-- 权限系统 —— 多角色、多权限管理
-- 附件管理 —— 服务器文件管理
-- 新闻系统 —— 基础新闻管理
-- 系统安全 —— 日志记录、ip 过滤
+## 功能
 
-## 开发环境部署/安装
+* 登录验证(极验证)
+* 后台用户管理
+* 角色管理
+* 权限管理
+* 后台菜单
+* 操作记录
+* 工具=》日志查看器
+* 工具=》路由查看器
+* 工具=》Artisan终端
+* 工具=》数据库终端
+* 工具=》脚手架（可以一件添加模块）
+* 工具=》计划任务
+* 前台用户管理
 
-本项目代码使用 PHP 框架 Laravel 5.5 开发，本地开发环境使用 Laravel Homestead。
+## 界面预览
+![Alt text](https://raw.githubusercontent.com/Yeelight/cloud2/master/public/screenshot/1.png)
 
-下文将在假定读者已经安装好了 Homestead 的情况下进行说明。如果您还未安装 Homestead，可以参照 Homestead 安装与设置 进行安装配置。
+![Alt text](https://raw.githubusercontent.com/Yeelight/cloud2/master/public/screenshot/2.png)
 
-### 基础安装
+![Alt text](https://raw.githubusercontent.com/Yeelight/cloud2/master/public/screenshot/3.png)
 
-- 克隆源代码
+![Alt text](https://raw.githubusercontent.com/Yeelight/cloud2/master/public/screenshot/4.png)
 
-克隆 lucms 源代码到本地：
+![Alt text](https://raw.githubusercontent.com/Yeelight/cloud2/master/public/screenshot/5.png)
 
-> git@gitee.com:zhjaa/lucms.git
+How to use （ Win10 + VMware Ubuntu 16.04 ） 2018-4-3
+------
 
-- php 配置修改
+### 1. Clone 代码
+```
+git clone https://gitee.com/yeelight/cloud2.git
+```
 
-1). 配置本地环境，根目录指向 `public`
-
-2). 安装 composer
-```html
+### 2. 安装 composer 包
+```
 composer install
+composer update /* 把控不住不要执行，若 update 之后，请务必测试新的版本是否影响现有业务，否则不要提交 composer.lock */
 ```
 
-2). 生成配置文件
-```html
+### 3. 生成配置文件
+```
 cp .env.example .env
-你可以根据情况修改 .env 文件里的内容，如数据库连接、缓存、邮件设置等：
-```
 
-2). 目录访问权限配置
+#### 复制完毕后注意修改.env里的配置信息
+#### 如果要开启极验证请从 http://www.geetest.com 申请 GEETEST_ID 和 GEETEST_KEY ,并设置 GEETEST= true
 
-```text
-  $ chmod -R 777 storage
-```
+chmod -R 755 storage
 
+chmod -R 777 bootstrap/cache
 
-3). 配置 .env  ，修改数据库信息 . ....
-```sh
-APP_NAME=Laravel
-APP_ENV=local
-APP_KEY=base64:IKlBaIonliiolP7yK0QWP8Ixwgc1Z5R2ylxEA6CD3nA=
-APP_DEBUG=true
-APP_LOG_LEVEL=debug
-APP_URL=http://lucms.test
+php artisan key:generate
 
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=lucms
-DB_USERNAME=root
-DB_PASSWORD=route
-.
-
-.
-
-.
-QUEUE_DRIVER=sync 「同步模式，不使用任何队列」 => redis
-
-.
-
-.
-
-.
-```
-
-4). 生成数据表及生成测试数据
-
-```sh
-$ art migrate
-$ art db:seed
-```
-
-5). 安装 passport 客户端, vue api 请求 token 认证要用到
-```sh
- $ art passport:install
- 
- # 以下内容复制到 .env 中
- Client ID: 2
- Client Secret: qtbbnoYSKM1QkAfbcs614iCiWmMvBWNdRloJNbDi
+php artisan jwt:secret
 
 ```
 
-6). 配置 .env  ，修改数据库信息 . ....
-```sh
-.
+### 4. 全局安装这些工具 ( 已安装请跳过 )
+```
+sudo npm --registry https://registry.npm.taobao.org install -g bower yarn gulp
+```
 
-.
+### 5. bower install
+root 用户根据提示添加 --allow-root 参数
+```
+bower --allow-root install
+```
+参考资料：
 
-.
-OAUTH_GRANT_TYPE=password
-OAUTH_CLIENT_ID=2
-OAUTH_CLIENT_SECRET=p7XaeU3D9RASxQ18eiF5CT1uL9xUJRYjT6O8BJFt
-OAUTH_SCOPE=*
+https://segmentfault.com/a/1190000002971135
 
-.
+https://bower.io/
 
-.
+### 6. Yarn 设置淘宝源
 
-.
+```
+yarn config set registry http://registry.npm.taobao.org/
+
+yarn install
+
+/* 如果你正在 Windows 系统上进行开发，或者在 Windows 主机系统上运行虚拟机，请执行这条命令。 */
+
+yarn install --no-bin-links
 ```
 
 
-7). 生成密钥
-```html
-art key:generate
+如果报错：Laravel Mix "sh: 1: cross-env: not found error"
+```
+yarn install --global cross-env
 ```
 
-8). 设定图片上传软链接 `storage/app/public/*` 到 `public/storage/images`
+如果报错：Error: spawn EACCES
 ```
-$ cd public
-$ mkdir storage
-$ ln -s /srv/wwwroot/homestead-code/lucms/storage/app/public/* ./storage/
+chmod -R 777 node_modules/
 ```
 
 
-- 修改 js 配置
-
-1). 全局修改基本域名 http://lucms.test => https://xxxxx
-
-`lucms/lu/src/libs/util.js`
-```js
-const ajaxUrl = env === 'development'
-    ? 'http://lucms.test/api'
-    : env === 'production'
-        ? 'http://lucms.test/api'
-        : 'http://lucms.test/api';
-```
-
-`lucms/lu/src/main.js`
-```js
-const app_url = '//lucms.test/api';
-```
-
-`lucms/lu/build/webpack.prod.config.js`
-```js
-.
-.
-.
-    output: {
-        //publicPath: 'http://lucms.test/lu/dist/',  // 修改 https://iv...admin 这部分为你的服务器域名
-        publicPath: 'http://lucms.codehaoshi.com/lu/dist/',  // 修改 https://iv...admin 这部分为你的服务器域名
-        filename: '[name].[hash].js',
-        chunkFilename: '[name].[hash].chunk.js'
-    },
-. 
-.
-.
-```
-
-### vuejs 安装与运行
-
-1). 开发环境
-```
-$ cd lu
-$ cnpm install
-$ npm run dev
-```
-
-2). 开发环境跨域配置
-chrome 安装插件 Access-Control-Allow_Credentials
-
-服务器跨域，Apache请自行搜索处理或在 php 文件中处理。此处不建议在 php 中处理:
-
-nginx 配置如下：
-```sh
-.
-.
-.
-  add_header Access-Control-Allow-Origin http://localhost:8080;
-  add_header Access-Control-Allow-Headers *;
-  add_header Access-Control-Allow-Methods GET,POST,OPTIONS,PATCH,PUT;
-  .
-  .
-  .
+### 7. 运行 Mix 任务
 
 ```
-
-> $ service nginx restart
-
-3). 生产环境
-```
-$ cd lu 
-$ npm run build
-$ mv ../public/dashboard.blade.php ../resources/views
+// 运行所有 Mix 任务... ( 开发环境 )
+yarn run dev
+// 运行所有 Mix 任务并缩小输出.. ( 生产环境 )
+yarn run production
 ```
 
-## 扩展包使用情况
+## Database & Seeding
+~~~
+php artisan migrate
 
-| 扩展包	| 一句话描述	| 本项目应用场景|
-| --- | --- | --- |
-| [laravel/passport](https://github.com/laravel/passport)     | jwt 用户认证包          | api 登录认证|
-| [Intervention/image](https://github.com/Intervention/image)     | 图片处理包     | 图片上传裁剪|
-| [laravel-permission:~2.7](https://github.com/spatie/laravel-permission)     | 权限管理包     | 权限管理|
-| [mews/purifier](https://github.com/mewebstudio/Purifier)     | xss过滤     | 富文本编辑器|
-| [overtrue/pinyin](https://github.com/overtrue/pinyin)     | 基于 CC-CEDICT 词典的中文转拼音工具     | 文章 seo 友好的 url|
-| [nrk/predis](https://github.com/nrk/predis)     | redis 队列驱动器     | 队列管理 |
-| [laravel/horizon](https://laravel-china.org/docs/laravel/5.5/horizon/1345)     | 队列监控     | 队列监控 |
-| [rap2hpoutre/laravel-log-viewer](https://github.com/rap2hpoutre/laravel-log-viewer)     | laravel 日志查看     | 查看日志 |
-| [aliyuncs/oss-sdk-php](https://help.aliyun.com/document_detail/32099.html?spm=5176.87240.400427.47.CtLkv4)     | 啊里云 oss     | 对象存储 |
+php artisan db:seed
+~~~
+### Install Laravel Passport with encryption keys to generate secure access tokens.
+~~~
+php artisan passport:install
 
+//www-data 为你的web用户
+sudo chown www-data:www-data storage/oauth-*.key 
 
-## 队列
-
-| Jobs | 一句话描述|
-|--- | --- |
-| TranslateSlug | 翻译文章 title |
+sudo chmod 600 storage/oauth-*.key
 
 
+~~~
+
+## 后台登录
+
+后台地址 http://yourhost/backend
+
+账号 admin 密码 admin
+
+## 接口文档
+
+http://doclever.cn/controller/public/public.html#5b459caf362f91495c0901c1
+
+## 后台模板
+
+https://github.com/almasaeed2010/AdminLTE/
+
+其他组件手册请自行搜索
+
+## l5-repository
+
+https://github.com/daofirst/l5-repository
+
+## 通过后台脚手架快速创建模块
+
+### 1. 快捷创建模型
+
+后台=》
+
+工具=》
+
+脚手架=》
+
+填写模型信息=》
+
+php artisan migrate（如果没有点选 Run migrate）
+
+### 2.增加模型路由
+
+在 route/backend/web.php 增加路由：
+
+$router->resource('your/route', 'YourModelsController');
+
+在 route/api.php 增加路由：
+
+$api->resource('your_route', 'YourModelsController');
+
+### 3.增加后台菜单
+
+自行在后台添加模型对于的菜单

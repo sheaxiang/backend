@@ -1,9 +1,22 @@
 <?php
 
-namespace App\Providers;
+namespace Yeelight\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider
+ *
+ * @category Yeelight
+ *
+ * @package Yeelight\Providers
+ *
+ * @author Sheldon Lee <xdlee110@gmail.com>
+ *
+ * @license https://opensource.org/licenses/MIT MIT
+ *
+ * @link https://www.yeelight.com
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -13,7 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \App\Models\Article::observe(\App\Observers\ArticleObserver::class);
+        view()->composer(
+            'backend.partials.sidebar', 'Yeelight\Composers\BackendMenuComposer'
+        );
     }
 
     /**

@@ -1,10 +1,22 @@
 <?php
 
-namespace App\Providers;
+namespace Yeelight\Providers;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
+/**
+ * Class EventServiceProvider
+ *
+ * @category Yeelight
+ *
+ * @package Yeelight\Providers
+ *
+ * @author Sheldon Lee <xdlee110@gmail.com>
+ *
+ * @license https://opensource.org/licenses/MIT MIT
+ *
+ * @link https://www.yeelight.com
+ */
 class EventServiceProvider extends ServiceProvider
 {
     /**
@@ -13,11 +25,14 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Event' => [
-            'App\Listeners\EventListener',
+        'Yeelight\Events\Event' => [
+            'Yeelight\Listeners\EventListener',
         ],
         'Laravel\Passport\Events\AccessTokenCreated' => [
-            'App\Listeners\PassportAccessTokenCreated',
+            'Yeelight\Listeners\Auth\RevokeOldTokens',
+        ],
+        'Laravel\Passport\Events\RefreshTokenCreated' => [
+            'Yeelight\Listeners\Auth\PruneOldTokens',
         ],
     ];
 

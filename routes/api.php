@@ -1,92 +1,47 @@
 <?php
 
+use Dingo\Api\Routing\Router;
 
-/**       ==========================          基本APi           ====================   */
-Route::namespace('Api')->group(function () {
+/*
+|--------------------------------------------------------------------------
+| API Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 
-    Route::post('login', 'LoginController@login');
-    Route::post('logout', 'LoginController@logout');
-    Route::post('refreshtoken', 'LoginController@refreshToken');
+// v1
+$api->version('v1', [
+    'namespace'  => 'Yeelight\Http\Controllers\Api\Controllers',
+    'middleware' => ['api'],
+], function (Router $api) {
+    // 登录前操作
+    $api->group(['middleware' => ['api.throttle'], 'prefix' => 'auth', 'limit' => 100, 'expires' => 5], function (Router $api) {
+        $api->post('register', 'AuthController@register');
+        $api->post('login', 'AuthController@login');
+        $api->post('refresh', 'AuthController@refresh');
+        $api->post('socialite_auth', 'SocialiteUsersController@socialAuth')->middleware('socialite.auto_password');
+    });
 
-    // 多表登录测试
-    /*
-    Route::post('admin_user/login', 'LoginController@adminUserLogin');
-    Route::get('admin_user', 'AdminUsersController@index');
-    Route::post('admin_user/logout', 'LoginController@adminUserLogout');
-    */
+    $api->group(['middleware' => ['auth:api']], function (Router $api) {
 
+        // Rate: 100 requests per 5 minutes
+        $api->group(['middleware' => ['api.throttle'], 'limit' => 100, 'expires' => 5], function (Router $api) {
+            // logout
+            $api->post('auth/logout', 'AuthController@logout');
 
-    Route::post('common_switch_enable', 'CommonController@switchEnable');
-    Route::get('common_get_table_status/{table_name}/{column_name?}', 'CommonController@getTableStatus');
+            // 用户模块
+            $api->group(['prefix' => 'users'], function (Router $api) {
+                $api->get('/me', 'UsersController@me');
+                $api->put('/me', 'UsersController@update');
+                //$api->delete('/me', 'UsersController@destroy');
+            });
+
+            // 产品模型模块
+            $api->resource('product_models', 'ProductModelsController');
+        });
+    });
 });
-
-/**       ==========================          后台APi           ====================   */
-Route::namespace('Admin')->group(function () {
-
-    Route::get('admin/users', 'UserController@usersList')->name('users.list');
-    Route::get('admin/users/{user}', 'UserController@show')->name('users.show');
-    Route::post('admin/users', 'UserController@store')->name('users.store');
-    Route::patch('admin/users/{user}', 'UserController@update')->name('users.update');
-    Route::get('admin/users/{user}/roles', 'UserController@getUserRoles')->name('users.get_user_roles');
-    Route::post('admin/give/{user}/roles', 'UserController@giveUserRoles')->name('users.give_user_roles');
-    Route::delete('admin/users/{user}', 'UserController@destroy')->name('users.destroy');
-
-    Route::get('admin/permissions', 'PermissionsController@permissionList')->name('permissions.list');
-    Route::post('admin/permissions', 'PermissionsController@addEditPermission')->name('permissions.add_edit');
-    Route::get('admin/all_permissions', 'PermissionsController@allPermissions')->name('permissions.all');
-    Route::delete('admin/permissions/{permission}', 'PermissionsController@destroy')->name('permissions.destroy');
-
-    Route::get('admin/roles', 'RolesController@roleList')->name('roles.list');
-    Route::post('admin/roles', 'RolesController@addEditRole')->name('roles.add_edit');
-    Route::get('admin/roles/{role}/permissions', 'RolesController@getRolePermissions')->name('roles.get_role_permissions');
-    Route::post('admin/give/{role}/permissions', 'RolesController@giveRolePermissions')->name('roles.give_role_permissions');
-    Route::get('admin/all_roles', 'RolesController@allRoles')->name('roles.all');
-    Route::delete('admin/roles/{role}', 'RolesController@destroy')->name('roles.destroy');
-
-
-    Route::get('admin/attachments', 'AttachmentsController@attachmentList')->name('attachments.list');
-    Route::delete('admin/attachments/{attachment}', 'AttachmentsController@destroy')->name('attachments.destroy');
-
-    Route::get('admin/advertisement_positions', 'AdvertisementPositionsController@advertisementPositionList')->name('advertisement_positions.list');
-    Route::post('admin/advertisement_positions', 'AdvertisementPositionsController@addEditAdvertisementPosition')->name('advertisement_positions.add_edit');
-    Route::delete('admin/advertisement_positions/{advertisement_position}', 'AdvertisementPositionsController@destroy')->name('advertisement_positions.destroy');
-    Route::get('admin/advertisement_positions/all', 'AdvertisementPositionsController@allAdvertisementPositions')->name('advertisement_positions.all');
-
-
-    Route::get('admin/advertisements', 'AdvertisementsController@advertisementList')->name('advertisements.list');
-    Route::get('admin/advertisements/{advertisement}', 'AdvertisementsController@show')->name('advertisements.show');
-    Route::post('admin/advertisements', 'AdvertisementsController@store')->name('advertisements.store');
-    Route::patch('admin/advertisements/{advertisement}', 'AdvertisementsController@update')->name('advertisements.update');
-    Route::delete('admin/advertisements/{advertisement}', 'AdvertisementsController@destroy')->name('advertisements.destroy');
-
-
-    Route::get('admin/categories', 'CategoriesController@categoryList')->name('categories.list');
-    Route::post('admin/categories', 'CategoriesController@addEditCategory')->name('categories.add_edit');
-    Route::get('admin/categories/all', 'CategoriesController@allCategories')->name('categories.all');
-
-
-    Route::get('admin/tags', 'TagsController@tagList')->name('tags.list');
-    Route::post('admin/tags', 'TagsController@addEditTag')->name('tags.add_edit');
-
-
-    Route::get('admin/articles', 'ArticlesController@articleList')->name('articles.list');
-    Route::get('admin/articles/{article}', 'ArticlesController@show')->name('articles.show');
-    Route::post('admin/articles', 'ArticlesController@store')->name('articles.store');
-    Route::patch('admin/articles/{article}', 'ArticlesController@update')->name('articles.update');
-    Route::delete('admin/articles/{article}', 'ArticlesController@destroy')->name('articles.destroy');
-
-
-    Route::get('admin/logs', 'LogsController@logList')->name('logs.list');
-
-
-    Route::get('admin/ip_filters', 'IpFiltersController@ipFilterList')->name('ip_filters.list');
-    Route::post('admin/ip_filters', 'IpFiltersController@addEditIpFilter')->name('ip_filters.add_edit');
-    Route::delete('admin/ip_filters/{ip_filter}', 'IpFiltersController@destroy')->name('ip_filters.destroy');
-});
-
-
-/**       ==========================          文件上传           ====================   */
-Route::post('upload/avatar', 'Api\UploadController@uploadAvatar')->name('uploads.avatar');
-Route::post('upload/tinymce', 'Api\UploadController@tinymceUpload')->name('uploads.tinymce');
-Route::post('upload/advertisement', 'Api\UploadController@advertisementUpload')->name('uploads.advertisement');
-Route::post('upload/other', 'Api\UploadController@otherUpload')->name('uploads.other');

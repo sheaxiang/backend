@@ -1,152 +1,125 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: sheldon
+ * Date: 18-3-27
+ * Time: 下午5:18.
+ */
 
-namespace App\Models;
+namespace Yeelight\Models;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\MessageBag;
+use Yeelight\Http\Middleware\Pjax;
 
-use Spatie\Permission\Guard;
-use Illuminate\Support\Collection;
-use Spatie\Permission\Traits\HasRoles;
-use Spatie\Permission\PermissionRegistrar;
-use Spatie\Permission\Traits\RefreshesPermissionCache;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Spatie\Permission\Exceptions\PermissionDoesNotExist;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Spatie\Permission\Contracts\Permission as PermissionContract;
-use DB;
-
-class Permission extends Model implements PermissionContract
+/**
+ * Class Permission
+ *
+ * @category Yeelight
+ *
+ * @package Yeelight\Models
+ *
+ * @author Sheldon Lee <xdlee110@gmail.com>
+ *
+ * @license https://opensource.org/licenses/MIT MIT
+ *
+ * @link https://www.yeelight.com
+ */
+class Permission
 {
-    use HasRoles;
-    use RefreshesPermissionCache;
-
-    protected $fillable = ['name','guard_name', 'description'];
-
-    public function __construct(array $attributes = [])
-    {
-        $attributes['guard_name'] = $attributes['guard_name'] ?? config('auth.defaults.guard');
-
-        parent::__construct($attributes);
-
-        $this->setTable(config('permission.table_names.permissions'));
-    }
-
-
     /**
-     * A permission can be applied to roles.
-     */
-    public function roles(): BelongsToMany
-    {
-        return $this->belongsToMany(
-            config('permission.models.role'),
-            config('permission.table_names.role_has_permissions')
-        );
-    }
-
-    /**
-     * A permission belongs to some users of the model associated with its guard.
-     */
-    public function users(): MorphToMany
-    {
-        return $this->morphedByMany(
-            getModelForGuard($this->attributes['guard_name']),
-            'model',
-            config('permission.table_names.model_has_permissions'),
-            'permission_id',
-            'model_id'
-        );
-    }
-
-    /**
-     * Find a permission by its name (and optionally guardName).
+     * Check permission.
      *
-     * @param string $name
-     * @param string|null $guardName
+     * @param $permission
      *
-     * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
-     *
-     * @return \Spatie\Permission\Contracts\Permission
+     * @return true
      */
-    public static function findByName(string $name, $guardName = null): PermissionContract
+    public static function check($permission)
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
-
-        $permission = static::getPermissions()->filter(function ($permission) use ($name, $guardName) {
-            return $permission->name === $name && $permission->guard_name === $guardName;
-        })->first();
-
-        if (! $permission) {
-            throw PermissionDoesNotExist::create($name, $guardName);
+        if (static::isAdministrator()) {
+            return true;
         }
 
-        return $permission;
+        if (is_array($permission)) {
+            collect($permission)->each(function ($permission) {
+                call_user_func([Permission::class, 'check'], $permission);
+            });
+
+            return;
+        }
+
+        if (Auth::guard(config('yeelight.backend.route.prefix'))->user()->cannot($permission)) {
+            static::error();
+        }
     }
 
     /**
-     * Find a permission by its id (and optionally guardName).
+     * Roles allowed to access.
      *
-     * @param int $id
-     * @param string|null $guardName
+     * @param $roles
      *
-     * @throws \Spatie\Permission\Exceptions\PermissionDoesNotExist
-     *
-     * @return \Spatie\Permission\Contracts\Permission
+     * @return true
      */
-    public static function findById(int $id, $guardName = null): PermissionContract
+    public static function allow($roles)
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
-
-        $permission = static::getPermissions()->filter(function ($permission) use ($id, $guardName) {
-            return $permission->id === $id && $permission->guard_name === $guardName;
-        })->first();
-
-        if (! $permission) {
-            throw PermissionDoesNotExist::withId($id, $guardName);
+        if (static::isAdministrator()) {
+            return true;
         }
 
-        return $permission;
+        if (!Auth::guard(config('yeelight.backend.route.prefix'))->user()->inRoles($roles)) {
+            static::error();
+        }
     }
 
     /**
-     * Find or create permission by its name (and optionally guardName).
+     * Don't check permission.
      *
-     * @param string $name
-     * @param string|null $guardName
-     *
-     * @return \Spatie\Permission\Contracts\Permission
+     * @return bool
      */
-    public static function findOrCreate(string $name, $guardName = null): PermissionContract
+    public static function free()
     {
-        $guardName = $guardName ?? Guard::getDefaultName(static::class);
-
-        $permission = static::getPermissions()->filter(function ($permission) use ($name, $guardName) {
-            return $permission->name === $name && $permission->guard_name === $guardName;
-        })->first();
-
-        if (! $permission) {
-            return static::create(['name' => $name, 'guard_name' => $guardName]);
-        }
-
-        return $permission;
+        return true;
     }
 
     /**
-     * Get the current cached permissions.
+     * Roles denied to access.
+     *
+     * @param $roles
+     *
+     * @return true
      */
-    protected static function getPermissions(): Collection
+    public static function deny($roles)
     {
-        return app(PermissionRegistrar::class)->getPermissions();
+        if (static::isAdministrator()) {
+            return true;
+        }
+
+        if (Auth::guard(config('yeelight.backend.route.prefix'))->user()->inRoles($roles)) {
+            static::error();
+        }
     }
 
-    public function destroyPermission()
+    /**
+     * Send error response page.
+     */
+    public static function error()
     {
-        DB::beginTransaction();
-        try {
-            $this->delete();
-            DB::commit();
-            return $this->succeed([], '权限删除成功');
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return $this->failed('内部错误');
-        }
+        $error = new MessageBag(trans('backend.deny'));
+
+        session()->flash('error', $error);
+
+        $response = response($error);
+
+        Pjax::respond($response);
+    }
+
+    /**
+     * If current user is administrator.
+     *
+     * @return mixed
+     */
+    public static function isAdministrator()
+    {
+        return Auth::guard(config('yeelight.backend.route.prefix'))->user()->isRole('administrator');
     }
 }

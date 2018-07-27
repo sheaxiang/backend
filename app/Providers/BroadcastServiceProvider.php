@@ -1,10 +1,23 @@
 <?php
 
-namespace App\Providers;
+namespace Yeelight\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class BroadcastServiceProvider
+ *
+ * @category Yeelight
+ *
+ * @package Yeelight\Providers
+ *
+ * @author Sheldon Lee <xdlee110@gmail.com>
+ *
+ * @license https://opensource.org/licenses/MIT MIT
+ *
+ * @link https://www.yeelight.com
+ */
 class BroadcastServiceProvider extends ServiceProvider
 {
     /**
